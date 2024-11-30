@@ -26,3 +26,5 @@ flutter:
         pluginClass: Sqlite3FlutterLibsPlugin
       windows:
         pluginClass: Sqlite3FlutterLibsPlugin
+      ohos:
+        pluginClass: Sqlite3FlutterLibsPlugin

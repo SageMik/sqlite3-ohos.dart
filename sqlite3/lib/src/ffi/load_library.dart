@@ -2,6 +2,7 @@ import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter_platform_utils/flutter_platform_utils.dart';
 import 'package:meta/meta.dart';
 
 /// Signature responsible for loading the dynamic sqlite3 library to use.
@@ -14,6 +15,7 @@ enum OperatingSystem {
   macOS,
   windows,
   fuchsia,
+  ohos
 }
 
 /// The instance managing different approaches to load the [DynamicLibrary] for
@@ -79,6 +81,8 @@ DynamicLibrary _defaultOpen() {
     return result;
   } else if (Platform.isWindows) {
     return DynamicLibrary.open('sqlite3.dll');
+  } else if(PlatformUtils.isOhos) {
+    return DynamicLibrary.open('libsqlite3.so');
   }
 
   throw UnsupportedError('Unsupported platform: ${Platform.operatingSystem}');
@@ -107,6 +111,7 @@ final class OpenDynamicLibrary {
     if (Platform.isMacOS) return OperatingSystem.macOS;
     if (Platform.isWindows) return OperatingSystem.windows;
     if (Platform.isFuchsia) return OperatingSystem.fuchsia;
+    if (PlatformUtils.isOhos) return OperatingSystem.ohos;
     return null;
   }
 
