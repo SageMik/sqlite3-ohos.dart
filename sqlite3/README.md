@@ -13,23 +13,25 @@
 由于尚未发布版本，因此需要在 `pubspec.yaml` 中通过 Git 的方式引入或从原版迁移：
 
 ```yaml
-sqlite3:
-  git:
-    url: "https://github.com/SageMik/sqlite3.dart-ohos"
-    path: "sqlite3"
-    ref: 071a9edd038a8e3f4b20c95c68dfa71731c47f15
+dependencies:
+  
+  sqlite3:
+    git:
+      url: "https://github.com/SageMik/sqlite3-ohos.dart"
+      path: "sqlite3"
+      ref: b8e37186ebdae03367ba132fb9c5c37b3b5f8d4f
 
-# sqlite3_flutter_libs 根据实际使用情况决定是否引入
-sqlite3_flutter_libs:
-  git:
-    url: "https://github.com/SageMik/sqlite3.dart-ohos"
-    path: "sqlite3_flutter_libs"
-    ref: 071a9edd038a8e3f4b20c95c68dfa71731c47f15
+  # sqlite3_flutter_libs 根据实际使用情况决定是否引入
+  sqlite3_flutter_libs:
+    git:
+      url: "https://github.com/SageMik/sqlite3-ohos.dart"
+      path: "sqlite3_flutter_libs"
+      ref: b8e37186ebdae03367ba132fb9c5c37b3b5f8d4f
 ```
 
 > [!TIP]
 >
-> 另一种不需要从原版迁移至本分支版本，但大概率会更麻烦的 HarmonyOS 适配方案请参阅 [此处]() 。
+> 一种不需要从原版 `sqlite3` 迁移至本分支版本，但可能会稍显麻烦的 HarmonyOS 适配方案请参阅 [此处](#继续使用原版-sqlite3-的适配方案) 。
 
 ### 使用
 
@@ -46,6 +48,39 @@ sqlite3_flutter_libs:
 您能够在任何可以通过 `DynamicLibrary` 获取 SQLite3 符号的平台上使用本库。此外，本库还支持在 Web 上访问编译为 WebAssembly 的 SQLite3 。Web 目前仅正式支持 `dartdevc` 和 `dart2js` ，对 `dart2wasm` 的支持 [是实验性且不完整的](https://github.com/simolus3/sqlite3.dart/issues/230) 。
 
 ### HarmonyOS
+
+#### 继续使用原版 `sqlite3` 的适配方案
+
+新建 `sqlite3.dart` 文件，内容如下：
+
+```dart
+import 'dart:ffi';
+import 'dart:io';
+
+import 'package:sqlite3/sqlite3.dart' as s3;
+import 'package:sqlite3/sqlite3.dart' hide sqlite3;
+import 'package:sqlite3/src/ffi/implementation.dart';
+
+Sqlite3? _sqlite3;
+
+Sqlite3 get sqlite3 {
+ return _sqlite3 ??= Platform.operatingSystem == 'ohos'
+     ? FfiSqlite3(DynamicLibrary.open("libsqlite3.so"))
+     : s3.sqlite3;
+}
+```
+
+首先，将项目中所有使用到 `package:sqlite3/sqlite3.dart` 中的 `sqlite3` 变量的地方，替换为上述文件的 `sqlite3` 变量。
+
+然后，如果您能够自行编译或获取 HarmonyOS 版本的 `libsqlite3.so` ，则无需引入 `sqlite3_flutter_libs` ，反之仍需在 `pubspec.yaml` 引入 `sqlite3_flutter_libs` ，以让 `DynamicLibrary.open` 访问 SQLite 原生库：
+
+```dart
+sqlite3_flutter_libs:
+  git:
+    url: "https://github.com/SageMik/sqlite3-ohos.dart"
+    path: "sqlite3_flutter_libs"
+    ref: b8e37186ebdae03367ba132fb9c5c37b3b5f8d4f
+```
 
 ### Android
 
