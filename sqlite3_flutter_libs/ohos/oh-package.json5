@@ -1,7 +1,7 @@
 {
   "name": "sqlite3_flutter_libs",
-  "version": "3.46.0+1",
-  "description": "Flutter plugin to include native sqlite3 libraries with your app (HarmonyOS Adaptation Version)",
+  "version": "1.0.0",
+  "description": "",
   "main": "index.ets",
   "author": "SageMik",
   "license": "Apache-2.0",
