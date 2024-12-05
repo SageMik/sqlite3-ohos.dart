@@ -11,11 +11,11 @@ HarmonyOS 适配基于 **[鸿蒙先锋队/flutter](https://gitee.com/harmonycomm
 ## 目录
 
 - [快速开始](#快速开始)
-    - [导入 `sqlite3`](#导入-sqlite3)
-        - [另一种 Harmony 适配方案](#另一种-HarmonyOS-适配方案)
-    - [导入 `sqlite3_flutter_libs` (可选)](#导入-sqlite3_flutter_libs-可选)
-      - [支持平台](#支持平台)
-    - [通过 `sqlite3` 操作数据库](#通过-sqlite3-操作数据库)
+  - [导入 `sqlite3`](#导入-sqlite3)
+    - [另一种 Harmony 适配方案](#另一种-HarmonyOS-适配方案)
+  - [导入 `sqlite3_flutter_libs` (可选)](#导入-sqlite3_flutter_libs-可选)
+    - [支持平台](#支持平台)
+  - [通过 `sqlite3` 操作数据库](#通过-sqlite3-操作数据库)
 - [自行提供 SQLite 原生库](#自行提供-SQLite-原生库)
   - [获取](#获取)
   - [覆盖](#覆盖)
@@ -30,9 +30,9 @@ HarmonyOS 适配基于 **[鸿蒙先锋队/flutter](https://gitee.com/harmonycomm
 dependencies:
   sqlite3:
     git:
-      url: "https://github.com/SageMik/sqlite3-ohos.dart"
-      path: "sqlite3"
-      ref: b8e37186ebdae03367ba132fb9c5c37b3b5f8d4f
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlite3
+      ref: sqlite3-2.4.7-ohos-beta
 ```
 
 #### 另一种 HarmonyOS 适配方案
@@ -83,9 +83,9 @@ Sqlite3 get sqlite3 {
 dependencies:
   sqlite3_flutter_libs:
     git:
-      url: "https://github.com/SageMik/sqlite3-ohos.dart"
-      path: "sqlite3_flutter_libs"
-      ref: b8e37186ebdae03367ba132fb9c5c37b3b5f8d4f
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlite3_flutter_libs
+      ref: sqlite3_flutter_libs-0.5.25-ohos-beta
 ```
 
 若非如此，或者您希望自行编译提供 SQLite 原生库，请参考下文 [自行提供 SQLite 原生库](#自行提供-SQLite-原生库) 。
@@ -94,9 +94,9 @@ dependencies:
 
 ### 通过 `sqlite3` 操作数据库
 
-1. 导入 `package:sqlite3/sqlite3.dart` 。 
-2. 使用 `final db = sqlite3.open()` 打开数据库文件，或使用 `sqlite3.openInMemory()` 打开一个临时的内存数据库。 
-3. 使用 `db.execute()` 执行语句，`db.prepare()` 预编译语句。 
+1. 导入 `package:sqlite3/sqlite3.dart` 。
+2. 使用 `final db = sqlite3.open()` 打开数据库文件，或使用 `sqlite3.openInMemory()` 打开一个临时的内存数据库。
+3. 使用 `db.execute()` 执行语句，`db.prepare()` 预编译语句。
 4. 使用完毕，通过 `dispose()` 关闭数据库或已编译的语句。
 
 更多示例请参考 [`example`](example) ，在 Flutter 上的简单使用请参考 [`../integration_tests/flutter_libs`](../integration_tests/flutter_libs) 。
