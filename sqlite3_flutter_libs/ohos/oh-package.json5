@@ -7,6 +7,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ohos/flutter_ohos": "file:./har/flutter.har",
-    "sqlite3_native_library": "file:./har/sqlite3_native_library.har"
+    "sqlite3-native-library": "^3.46.0+1"
   }
 }
