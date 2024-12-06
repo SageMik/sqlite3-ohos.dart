@@ -4,59 +4,120 @@
 
 Provides Dart bindings to [SQLite](https://www.sqlite.org/index.html) via `dart:ffi`.
 
-## Using this library
+This library is one of forked versions of [sqlite.dart](https://github.com/simolus3/sqlite3.dart). Derived from the original support for Android, iOS, Windows, MacOS, Linux, and Web, **this library provides additional support for HarmonyOS**.
 
-1. Make sure sqlite3 is available as a shared library in your environment (see
-   [supported platforms](#supported-platforms) below).
-2. Import `package:sqlite3/sqlite3.dart`.
-3. Use `sqlite3.open()` to open a database file, or `sqlite3.openInMemory()` to
-   open a temporary in-memory database.
-4. Use `Database.execute` or `Database.prepare` to execute statements directly
-   or by preparing them first.
-5. Don't forget to close prepared statements or the database with `dispose()`
-   if you no longer need it.
+HarmonyOS support is based on **[鸿蒙先锋队/flutter](https://gitee.com/harmonycommando_flutter/flutter/tree/oh-3.22.0/) (Flutter Version：3.22)** and has been tested on Mac Arm HarmonyOS Simulator.
 
-For a more complete example on how to use this library, see the [example](https://pub.dev/packages/sqlite3/example).
+## Contents
 
-## Supported platforms
+- [Quick Start](#Quick-Start)
+    - [Import `sqlite3`](#Import-sqlite3)
+        - [Another Way to Support HarmonyOS](#Another-Way-to-Support-HarmonyOS)
+    - [Import `sqlite3_flutter_libs` (Optional)](#Import-sqlite3_flutter_libs-Optional)
+    - [Manage Databases via `sqlite3`](#Manage-Databases-via-sqlite3)
+- [Provide SQLite Native Libraries Manually](#Provide-SQLite-Native-Libraries-Manually)
+    - [Obtain](#Obtain)
+    - [Override](#Override)
+- [Addition](#Addition)
 
-You can use this library on any platform where you can obtain a `DynamicLibrary` with symbols
-from `sqlite3`.
-In addition, this package supports running on the web by accessing a sqlite3
-build compiled to WebAssembly.
-Web support is only official supported for `dartdevc` and `dart2js`. Support
-for `dart2wasm` [is experimental and incomplete](https://github.com/simolus3/sqlite3.dart/issues/230).
 
-Here's how to use this library on the most popular platforms:
+## Quick Start
 
-- __Android__: Flutter users can depend on the `sqlite3_flutter_libs` package to ship the latest sqlite3
-  version with their app.
-- __iOS__: Contains a built-in version of sqlite that this package will use by default.
-  When using Flutter, you can also depend on `sqlite3_flutter_libs` to ship the latest
-  sqlite3 version with your app.
-- __Linux__: Flutter users can depend on `sqlite3_flutter_libs` to ship the latest sqlite3
-  version with their app.
-  Alternatively, or when not using Flutter, you can install sqlite3 as a package from your
-  distributions package manager (like `libsqlite3-dev` on Debian), or you can manually ship
-  sqlite3 with your app (see below).
-- __macOS__: Contains a built-in version of sqlite that this package will use by default.
-  Also, you can depend on `sqlite3_flutter_libs` if you want to include the latest
-  sqlite3 version with your app.
-- __Windows__: Flutter users can depend on `sqlite3_flutter_libs` to ship the latest sqlite3
-  version with their app.
-  When not using Flutter, you need to manually include sqlite3 (see below).
-- __Web__: See [web support](#wasm-web-support) below.
+### Import `sqlite3`
 
-On Android, iOS and macOS, you can depend on the `sqlcipher_flutter_libs` package to use
-[SQLCipher](https://www.zetetic.net/sqlcipher/) instead of SQLite.
-Just be sure to never depend on both `sqlcipher_flutter_libs` and `sqlite3_flutter_libs`!
+In `pubspec.yaml`, import this forked version:
 
-### Manually providing sqlite3 libraries
+```yaml
+dependencies:
+  sqlite3:
+    git:
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlite3
+      ref: sqlite3-2.4.7-ohos-beta
+```
 
-Instead of using the sqlite3 library from the OS, you can also ship a custom sqlite3 library along
-with your app. You can override the way this package looks for sqlite3 to instead use your custom
-library.
-For instance, if you release your own `sqlite3.so` next to your application, you could use:
+#### Another Way to Support HarmonyOS
+
+Besides importing this forked version, if you want to support HarmonyOS, you can also use a simple judgment to achieve it. So that you can keep the dependency reference to original `sqlite3`, but it may need more modifications.
+
+Specifically, you need to define a new `sqlite3` as follows and replace all the usages of `sqlite3` imported from `package:sqlite3/sqlite3.dart` in your project with it.
+
+```dart
+import 'dart:ffi';
+import 'dart:io';
+
+import 'package:sqlite3/sqlite3.dart' as s3;
+import 'package:sqlite3/sqlite3.dart' hide sqlite3;
+import 'package:sqlite3/src/ffi/implementation.dart';
+
+Sqlite3? _sqlite3;
+
+Sqlite3 get sqlite3 {
+ return _sqlite3 ??= Platform.operatingSystem == 'ohos'
+     ? FfiSqlite3(DynamicLibrary.open("libsqlite3.so"))
+     : s3.sqlite3;
+}
+```
+
+### Import `sqlite3_flutter_libs` (Optional)
+
+To support `sqlite3` in accessing databases, you need to ensure that SQLite native libraries are accessible in your environment.
+
+For example, For Android and HarmonyOS, you may provide `libsqlite3.so` for architectures such as `arm64-v8a`, `x86_64` and so on. For Windows, `sqlite3.dll` for `x64` is what you need.
+
+This also means that you can use `sqlite3` on any platform that can load native libraries and obtain SQLite3 symbols via `DynamicLibrary`.
+
+If you are a Flutter developer, it is recommended to import `sqlite3_flutter_libs` directly, which includes native SQLite libraries for the following platforms:
+
+- HarmonyOS
+- Android
+- iOS
+- Windows
+- MacOS
+- Linux
+
+After import it, the native libraries will be included in your application and distributed with it. As a result, you can use `sqlite3` to maintain SQLite databases on these platforms without any additional configurations.
+
+```yaml
+dependencies:
+  sqlite3_flutter_libs:
+    git:
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlite3_flutter_libs
+      ref: sqlite3_flutter_libs-0.5.25-ohos-beta
+```
+
+If not, or if you prefer to compile SQLite native libraries by yourself, please refer to [Provide SQLite Native Libraries Manually](#Provide-SQLite-Native-Libraries-Manually).
+
+In addition, there are some differences in the availability of SQLite native libraries on different platforms. Please also refer to [Provide SQLite Native Libraries Manually](#Provide-SQLite-Native-Libraries-Manually) for more information.
+
+### Manage Databases via `sqlite3`
+
+1. Import `package:sqlite3/sqlite3.dart`.
+2. Use `final db = sqlite3.open()` to open a database file , or use `sqlite3.openInMemory()` to open a temporary in-memory database.
+3. Use `db.execute()` to execute statements or use `db.prepare()` to precompile them first.
+4. When finished, use `dispose()` to close the database or compiled statements.
+
+### Provide SQLite Native Libraries Manually
+
+#### Obtain
+
+Apart from **including SQLite native libraries via `sqlite3_flutter_libs`**, you can also obtain SQLite native libraries in different ways on various platforms, for example:
+
+- **Android**: You can get `libsqlite3x.so` provided by [sqlite-android](https://github.com/requery/sqlite-android).
+- **iOS**: Without other SQLite native libraries, the system's built-in SQLite is used by default.
+- **MacOS**: Same as iOS.
+
+(For the default way `sqlite3` searches native libraries, please refer to [`lib/src/ffi/load_library.dart`](lib/src/ffi/load_library.dart) )
+
+If you want to customize your native libraries with different compilation options and compile them yourself, please refer to the official guide [How To Compile SQLite](https://sqlite.org/howtocompile.html) or the implementations of [`sqlite3_flutter_libs` on different platforms](../sqlite3_flutter_libs) for different platforms, for example:
+
+- **Android**: [`sqlite3-native-library/cpp/CMakeLists.txt`](https://github.com/simolus3/sqlite-native-libraries/blob/master/sqlite3-native-library/cpp/CMakeLists.txt) in [sqlite-native-libraries](https://github.com/simolus3/sqlite-native-libraries).
+- **HarmonyOS**: [`sqlite3_native_library/src/main/cpp/CMakeLists.txt`](https://github.com/SageMik/sqlite3_ohos/blob/main/sqlite3_native_library/src/main/cpp/CMakeLists.txt) in [sqlite_ohos](https://github.com/SageMik/sqlite3_ohos) (keep consistent with the Android).
+
+#### Override
+
+After obtaining SQLite native libraries, you need to override the way `sqlite3` searches them. For example, if you have got `sqlite3.so` for Linux platform, you can use your native library as follows:
 
 ```dart
 import 'dart:ffi';
@@ -70,7 +131,9 @@ void main() {
   open.overrideFor(OperatingSystem.linux, _openOnLinux);
 
   final db = sqlite3.openInMemory();
-  // Use the database
+  
+  // 执行数据库操作
+
   db.dispose();
 }
 
@@ -81,150 +144,6 @@ DynamicLibrary _openOnLinux() {
 }
 ```
 
-Just be sure to first override the behavior and then use `sqlite3`.
+## Addition
 
-## Supported datatypes
-
-When binding parameters to queries, the supported types are `ìnt`,
-`double`, `String`, `List<int>` (for `BLOB`) and `null`.
-Result sets will use the same set of types.
-On the web (but only on the web), `BigInt` is supported as well.
-
-## WASM (web support)
-
-This package experimentally supports being used on the web with a bit of setup.
-The web version binds to a custom version of sqlite3 compiled to WebAssembly without
-Emscripten or any JavaScript glue code.
-
-Please note that stable web support for `package:sqlite3` is restricted to Dart
-being compiled to JavaScript. Support for `dart2wasm` is experimental. The API
-is identical, but the implementation [is severly limited](https://github.com/simolus3/sqlite3.dart/issues/230).
-
-### Setup
-
-To use this package on the web, you need:
-
-- The sqlite3 library compiled as a WebAssembly module, available from the
-  [GitHub releases](https://github.com/simolus3/sqlite3.dart/releases) of this package.
-  Note that, for this package, __sqlite3 has to be compiled in a special way__.
-  Existing WebAssembly files from e.g. sql.js will not work with `package:sqlite3/wasm.dart`.
-- A file system implementation, since websites can't by default access the host's file system.
-  This package provides `InMemoryFileSystem` and an `IndexedDbFileSystem` implementation.
-
-After putting `sqlite3.wasm` under the `web/` directory of your project, you can
-open and use `sqlite3` like this:
-
-```dart
-import 'package:http/http.dart' as http;
-import 'package:sqlite3/common.dart';
-import 'package:sqlite3/wasm.dart';
-
-Future<WasmSqlite3> loadSqlite() async {
-  final sqlite = await WasmSqlite3.loadFromUrl(Uri.parse('sqlite3.wasm'));
-  final fileSystem = await IndexedDbFileSystem.open(dbName: 'my_app');
-  sqlite.registerVirtualFileSystem(fileSystem, makeDefault: true);
-  return sqlite;
-}
-```
-
-The returned `WasmSqlite3` has an interface compatible to that of the standard `sqlite3` field
-in `package:sqlite3/sqlite3.dart`, databases can be opened in similar ways.
-
-An example for such web folder is in `example/web/` of this repo.
-To view the example, copy a compiled `sqlite3.wasm` file to `web/sqlite3.wasm` in this directory.
-Then, run `dart run build_runner serve example:8080` and  visit `http://localhost:8080/web/` in a browser.
-
-Another `example/multiplatform/` uses common interface to `sqlite3` on web and native platforms.
-To run this example, merge its files into a Flutter app.
-
-### Sharing code between web and a Dart VM
-
-The `package:sqlite3/common.dart` library defines common interfaces that are implemented by both
-the FFI-based native version in `package:sqlite3/sqlite3.dart` and the experimental WASM
-version in `package:sqlite3/wasm.dart`.
-By having shared code depend on the common interfaces, it can be used for both native and web
-apps.
-
-### Testing
-
-To run the tests of this package with wasm, either download the `sqlite3.wasm` file from the
-GitHub releases to `example/web` or compile it yourself (see [compiling](#compiling) below).
-
-To run tests on the Dart VM, Firefox and Chrome, use:
-
-```
-dart test -P full
-```
-
-### Compiling
-
-Note: Compiling sqlite3 to WebAssembly is not necessary for users of this package,
-just grab the `.wasm` from the latest release on GitHub.
-
-This section describes how to compile the WebAssembly modules from source. This
-uses a LLVM-based toolchain with components of the WASI SDK for C runtime components.
-
-#### Setup
-
-##### Linux
-
-On Linux, you need a LLVM based toolchain capable of compiling to WebAssembly.
-On Arch Linux, the `wasi-compiler-rt` and `wasi-libc` packages are enough for this.
-On other distros, you may have to download the sysroot and compiler builtins from their
-respective package managers or directly from the WASI SDK releases.
-
-With wasi in `/usr/share/wasi-sysroot` and the default clang compiler having the
-required builtins, you can setup the build with:
-
-```
-cmake -S assets/wasm -B .dart_tool/sqlite3_build
-```
-
-##### macOS
-
-On macOS, I'm installing `cmake`, `llvm` and `binaryen` through Homebrew. Afterwards, you can download the
-wasi sysroot and the compiler runtimes from the Wasi SDK project:
-
-```
-curl -sL https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-22/libclang_rt.builtins-wasm32-wasi-22.0.tar.gz | \
-  tar x -zf - -C /opt/homebrew/opt/llvm/lib/clang/18*
-
-curl -sS -L https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-22/wasi-sysroot-22.0.tar.gz | \
-  sudo tar x -zf - -C /opt
-```
-
-Replace `clang/18` with the correct directory if you're using a different version.
-
-Then, set up the build with
-
-```
-cmake -Dwasi_sysroot=/opt/wasi-sysroot -Dclang=/opt/homebrew/opt/llvm/bin/clang -S assets/wasm -B .dart_tool/sqlite3_build
-```
-
-#### Building
-
-In this directory, run:
-
-```
-cmake --build .dart_tool/sqlite3_build/ -t output -j
-```
-
-The `output` target copies `sqlite3.wasm` and `sqlite3.debug.wasm` to `example/web`.
-
-(Of course, you can also run the build in any other directory than `.dart_tool/sqite3_build` if you want to).
-
-### Customizing the WASM module
-
-The build scripts in this repository, which are also used for the default distribution of `sqlite3.wasm`
-attached to releases, are designed to mirror the options used by `sqlite3_flutter_libs`.
-If you want to use different options, or include custom extensions in the WASM module, you can customize
-the build setup.
-
-To use regular sqlite3 sources with different compile-time options, alter `assets/wasm/sqlite_cfg.h` and
-re-run the build as described in [compiling](#compiling).
-Including additional extensions written in C is possible by adapting the `CMakeLists.txt` in
-`assets/wasm`.
-
-A simple example demonstrating how to include Rust-based extensions is included in `example/custom_wasm_build`.
-The readme in that directory explains the build process in detail, but you still need the WASI/Clang toolchains
-described in the [setup section](#linux).
+For any matters not covered herein, please refer to [sqlite.dart](https://github.com/simolus3/sqlite3.dart).
