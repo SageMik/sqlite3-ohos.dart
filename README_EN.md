@@ -16,10 +16,10 @@ Example: [`sqlite3/example/main.dart`](sqlite3/example/main.dart)
 
 ## HarmonyOS Support
 
-| Package                                           | Support                                        |
-| ------------------------------------------------- | ---------------------------------------------- |
-| [`sqlite3`](sqlite3)                               | Already available, please refer to[here](sqlite3) |
-| [`sqlite3_flutter_libs`](sqlite3_flutter_libs)     | Already available, same as above               |
-| [`sqlcipher_flutter_libs`](sqlcipher_flutter_libs) | Not yet                                        |
-| [`sqlite3_web`](sqlite3_web)                       | Irrelevant                                     |
-| [`integration_tests`](integration_tests)           | Example usage, not yet                         |
+| Package                                           | Support                                            |
+| ------------------------------------------------- |----------------------------------------------------|
+| [`sqlite3`](sqlite3)                               | Already available, please refer to [here](sqlite3) |
+| [`sqlite3_flutter_libs`](sqlite3_flutter_libs)     | Already available, same as above                   |
+| [`sqlcipher_flutter_libs`](sqlcipher_flutter_libs) | Not yet                                            |
+| [`sqlite3_web`](sqlite3_web)                       | Irrelevant                                         |
+| [`integration_tests`](integration_tests)           | Example usage, not yet                             |

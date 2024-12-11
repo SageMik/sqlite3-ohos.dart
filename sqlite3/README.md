@@ -18,13 +18,12 @@ HarmonyOS 适配基于 **[鸿蒙先锋队/flutter](https://gitee.com/harmonycomm
 - [自行提供 SQLite 原生库](#自行提供-SQLite-原生库)
   - [获取](#获取)
   - [覆盖](#覆盖)
+- [`drift` 的 HarmonyOS 适配](#drift-的-harmonyos-适配)
 - [补充说明](#补充说明)
 
 ## 快速开始
 
 ### 导入 `sqlite3`
-
-在 `pubspec.yaml` 中引入本分支版本：
 
 ```yaml
 dependencies:
@@ -60,23 +59,6 @@ Sqlite3 get sqlite3 {
 
 ### 导入 `sqlite3_flutter_libs` (可选)
 
-为了支持 `sqlite3` 管理数据库，您需要确保您的环境中存在可访问的 SQLite3 原生库。
-
-例如，对于 Android 和 HarmonyOS 平台，需要根据实际情况提供 `arm64-v8a`, `x86_64` 等架构的 `libsqlite3.so` ；对于 Windows 平台，则需要提供 `x64` 架构的 `sqlite3.dll` 。
-
-这也意味着，您能够在任何可以通过 `DynamicLibrary` 加载原生库获取到 SQLite3 符号的平台上使用 `sqlite3` 。
-
-如果您是 Flutter 开发者，推荐直接引入 `sqlite3_flutter_libs` ，该库包含了如下平台的 SQLite 原生库：
-
-- HarmonyOS
-- Android
-- iOS
-- Windows
-- MacOS
-- Linux
-
-引入后，原生库会被包含在应用中并随应用分发。因此您无需进行任何额外的配置，即可通过 `sqlite3` 在上述平台管理 SQLite 数据库。
-
 ```yaml
 dependencies:
   sqlite3_flutter_libs:
@@ -85,6 +67,23 @@ dependencies:
       path: sqlite3_flutter_libs
       ref: sqlite3_flutter_libs-0.5.25-ohos-beta
 ```
+
+为了支持 `sqlite3` 管理数据库，您需要确保您的环境中存在可访问的 SQLite3 原生库。
+
+例如，对于 Android 和 HarmonyOS 平台，需要根据实际情况提供 `arm64-v8a`, `x86_64` 等架构的 `libsqlite3.so` ；对于 Windows 平台，则需要提供 `x64` 架构的 `sqlite3.dll` 。
+
+这也意味着，您能够在任何可以通过 `DynamicLibrary` 加载原生库获取到 SQLite3 符号的平台上使用 `sqlite3` 。
+
+**如果您是 Flutter 开发者，推荐直接引入 `sqlite3_flutter_libs`** ，该库包含了如下平台的 SQLite 原生库：
+
+- HarmonyOS
+- Android
+- iOS
+- Windows
+- MacOS
+- Linux
+
+引入后，原生库会被包含在应用中并随应用分发。因此**您无需进行任何额外的配置，即可通过 `sqlite3` 在上述平台管理 SQLite 数据库。**
 
 若非如此，或者您希望自行编译提供 SQLite 原生库，请参考下文 [自行提供 SQLite 原生库](#自行提供-SQLite-原生库) 。
 
@@ -144,6 +143,10 @@ DynamicLibrary _openOnLinux() {
   return DynamicLibrary.open(libraryNextToScript.path);
 }
 ```
+
+## `drift` 的 HarmonyOS 适配
+
+[Drift](https://github.com/simolus3/drift) 是基于 `sqlite3` 实现的 ORM 框架。 理论上，在 `pubspec.yaml` 通过 `dependency_overrides` 覆盖 `sqlite3` 为本分支版本，就应当能够让 `drift` 支持 HarmonyOS 平台。这一结论目前需要通过实例验证，待补充具体示例。
 
 ## 补充说明
 

@@ -18,14 +18,13 @@ HarmonyOS support is based on **[鸿蒙先锋队/flutter](https://gitee.com/harm
 - [Provide SQLite Native Libraries Manually](#Provide-SQLite-Native-Libraries-Manually)
     - [Obtain](#Obtain)
     - [Override](#Override)
+- [`drift` for HarmonyOS](#drift-for-harmonyos)
 - [Addition](#Addition)
 
 
 ## Quick Start
 
 ### Import `sqlite3`
-
-In `pubspec.yaml`, import this forked version:
 
 ```yaml
 dependencies:
@@ -61,6 +60,15 @@ Sqlite3 get sqlite3 {
 
 ### Import `sqlite3_flutter_libs` (Optional)
 
+```yaml
+dependencies:
+  sqlite3_flutter_libs:
+    git:
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlite3_flutter_libs
+      ref: sqlite3_flutter_libs-0.5.25-ohos-beta
+```
+
 To support `sqlite3` in accessing databases, you need to ensure that SQLite native libraries are accessible in your environment.
 
 For example, For Android and HarmonyOS, you may provide `libsqlite3.so` for architectures such as `arm64-v8a`, `x86_64` and so on. For Windows, `sqlite3.dll` for `x64` is what you need.
@@ -77,15 +85,6 @@ If you are a Flutter developer, it is recommended to import `sqlite3_flutter_lib
 - Linux
 
 After import it, the native libraries will be included in your application and distributed with it. As a result, you can use `sqlite3` to maintain SQLite databases on these platforms without any additional configurations.
-
-```yaml
-dependencies:
-  sqlite3_flutter_libs:
-    git:
-      url: https://github.com/SageMik/sqlite3-ohos.dart
-      path: sqlite3_flutter_libs
-      ref: sqlite3_flutter_libs-0.5.25-ohos-beta
-```
 
 If not, or if you prefer to compile SQLite native libraries by yourself, please refer to [Provide SQLite Native Libraries Manually](#Provide-SQLite-Native-Libraries-Manually).
 
@@ -143,6 +142,10 @@ DynamicLibrary _openOnLinux() {
   return DynamicLibrary.open(libraryNextToScript.path);
 }
 ```
+
+## `drift` for HarmonyOS
+
+[Drift](https://github.com/simolus3/drift) is an ORM framework based on `sqlite3`. In principle, by using `dependency_overrides` in `pubspec.yaml` to override `sqlite3` with this forked version, you should be able to use `drift` on HarmonyOS. This conclusion needs to be verified and is waiting for examples.
 
 ## Addition
 
