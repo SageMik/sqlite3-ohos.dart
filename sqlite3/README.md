@@ -6,24 +6,24 @@
 
 本库是 [sqlite.dart](https://github.com/simolus3/sqlite3.dart) 的分支版本之一，在原版支持 Android, iOS, Windows, MacOS, Linux, Web 的基础上，**新增了对 HarmonyOS 平台的支持**。
 
-HarmonyOS 适配基于 **[鸿蒙先锋队/flutter](https://gitee.com/harmonycommando_flutter/flutter/tree/oh-3.22.0/) (Flutter版本：3.22)** 实现，目前已在 Mac Arm HarmonyOS 模拟器 经过测试。
+HarmonyOS 适配基于 **[鸿蒙先锋队/flutter](https://gitee.com/harmonycommando_flutter/flutter/tree/oh-3.22.0/) (Flutter版本：3.22)** 实现，目前已在 Mac Arm HarmonyOS 模拟器 通过测试。
 
 ## 目录
 
 - [快速开始](#快速开始)
-  - [导入 `sqlite3`](#导入-sqlite3)
-    - [另一种 Harmony 适配方案](#另一种-HarmonyOS-适配方案)
-  - [导入 `sqlite3_flutter_libs` (可选)](#导入-sqlite3_flutter_libs-可选)
+  - [添加并导入 `sqlite3`](#添加并导入-sqlite3)
+    - [其他 HarmonyOS 适配方案](#其他-harmonyos-适配方案)
+  - [添加 `sqlite3_flutter_libs` (可选)](#添加-sqlite3_flutter_libs-可选)
   - [通过 `sqlite3` 管理数据库](#通过-sqlite3-管理数据库)
-- [自行提供 SQLite 原生库](#自行提供-SQLite-原生库)
-  - [获取](#获取)
-  - [覆盖](#覆盖)
+  - [自行提供 SQLite 原生库](#自行提供-sqlite-原生库)
+    - [获取](#获取)
+    - [覆盖](#覆盖)
 - [`drift` 的 HarmonyOS 适配](#drift-的-harmonyos-适配)
 - [补充说明](#补充说明)
 
 ## 快速开始
 
-### 导入 `sqlite3`
+### 添加并导入 `sqlite3`
 
 ```yaml
 dependencies:
@@ -34,7 +34,7 @@ dependencies:
       ref: sqlite3-2.4.7-ohos-beta
 ```
 
-#### 另一种 HarmonyOS 适配方案
+#### 其他 HarmonyOS 适配方案
 
 如果您希望支持 HarmonyOS 平台，除了引入本分支版本外，也可以通过简单的代码判断实现。如此可以保留对原版 `sqlite3` 的依赖引用，但可能需要更繁琐的修改。
 
@@ -57,7 +57,7 @@ Sqlite3 get sqlite3 {
 }
 ```
 
-### 导入 `sqlite3_flutter_libs` (可选)
+### 添加 `sqlite3_flutter_libs` (可选)
 
 ```yaml
 dependencies:
@@ -74,7 +74,7 @@ dependencies:
 
 这也意味着，您能够在任何可以通过 `DynamicLibrary` 加载原生库获取到 SQLite3 符号的平台上使用 `sqlite3` 。
 
-**如果您是 Flutter 开发者，推荐直接引入 `sqlite3_flutter_libs`** ，该库包含了如下平台的 SQLite 原生库：
+**如果您是 Flutter 开发者，推荐直接添加 `sqlite3_flutter_libs` 依赖** ，该库包含了如下平台的 SQLite 原生库：
 
 - HarmonyOS
 - Android
@@ -83,7 +83,7 @@ dependencies:
 - MacOS
 - Linux
 
-引入后，原生库会被包含在应用中并随应用分发。因此**您无需进行任何额外的配置，即可通过 `sqlite3` 在上述平台管理 SQLite 数据库。**
+添加依赖后，原生库会被包含在应用中并随应用分发。因此**您无需进行任何额外的配置，即可通过 `sqlite3` 在上述平台管理 SQLite 数据库。**
 
 若非如此，或者您希望自行编译提供 SQLite 原生库，请参考下文 [自行提供 SQLite 原生库](#自行提供-SQLite-原生库) 。
 
@@ -113,7 +113,7 @@ dependencies:
 如果您希望自行编译 SQLite 原生库，通过调整不同的编译选项自定义您的原生库，请参考 [SQLite 官方编译指南](https://sqlite.org/howtocompile.html)，或参考 [`sqlite3_flutter_libs` 的在不同平台的编译实现](../sqlite3_flutter_libs)，例如：
 
 - **Android**：[sqlite-native-libraries](https://github.com/simolus3/sqlite-native-libraries) 中 [`sqlite3-native-library/cpp/CMakeLists.txt`](https://github.com/simolus3/sqlite-native-libraries/blob/master/sqlite3-native-library/cpp/CMakeLists.txt) 。
-- **HarmonyOS**：[sqlite_ohos](https://github.com/SageMik/sqlite3_ohos) 中 [`sqlite3_native_library/src/main/cpp/CMakeLists.txt`](https://github.com/SageMik/sqlite3_ohos/blob/main/sqlite3_native_library/src/main/cpp/CMakeLists.txt)（与 Android 实现保持一致）。
+- **HarmonyOS**：[sqlite3.ArkTS](https://github.com/SageMik/sqlite3.ArkTS) 中 [`sqlite3_native_library/src/main/cpp/CMakeLists.txt`](https://github.com/SageMik/sqlite3.ArkTS/blob/main/sqlite3_native_library/src/main/cpp/CMakeLists.txt)（与 Android 实现保持一致）。
 
 #### 覆盖
 
@@ -150,5 +150,4 @@ DynamicLibrary _openOnLinux() {
 
 ## 补充说明
 
-未尽事宜，请参阅 [sqlite.dart](https://github.com/simolus3/sqlite3.dart) 文档。
-
+未尽事宜，请参阅原仓库 [sqlite.dart](https://github.com/simolus3/sqlite3.dart) 文档。

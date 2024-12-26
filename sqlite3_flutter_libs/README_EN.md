@@ -1,6 +1,40 @@
 # sqlite3_flutter_libs
 
-**中文** | [English](README_EN.md)
+[中文](README.md) | **English**
+
+This package includes SQLite Native Libraries for the following platforms:
+
+- HarmonyOS
+- Android
+- iOS
+- Windows
+- MacOS
+- Linux
+
+It supports Flutter applications in managing databases through [`sqlite3`](../sqlite3).
+
+After adding a dependency on this package, the native libraries will be included in your application and distributed with it. Therefore, **you do not need to perform any additional configuration to manage SQLite databases using `sqlite3` on the above platforms.**
+
+For more information, please refer to the [`sqlite3` documentation](../sqlite3/README.md).
+
+## SQLite Compilation Notes
+
+The SQLite native libraries in this package are compiled using the [officially recommended compilation options](https://www.sqlite.org/compile.html#recommended_compile_time_options), and by default include the `fts5` and `json1` modules (in recent versions of SQLite, `json1` is added as part of the default build). Other modules are not included.
+
+## Android Platform Notes
+
+### Supported Architectures
+
+This package includes the following architectures for Android SQLite native libraries:
+
+- `arm64-v8a`
+- `armeabi-v7a`
+- `x86`
+- `x86_64`
+
+Since Flutter does not support building release versions for `x86` 32-bit devices (see [here](https://docs.flutter.cn/deployment/android#what-are-the-supported-target-architectures)), you can limit the supported architectures in `build.gradle` to reduce the app size:
+
+
 
 本库包含了如下平台的 SQLite 原生库 (Native Library)：
 
@@ -11,7 +45,7 @@
 - MacOS
 - Linux
 
-用于支持 Flutter 应用通过 [`sqlite3`](../sqlite3) 管理数据库。
+用于支持 Flutter 应用通过 `sqlite3` 管理数据库。
 
 添加对本库的依赖后，原生库会被包含在应用中并随应用分发。因此**您无需进行任何额外的配置，即可通过 `sqlite3` 在上述平台管理 SQLite 数据库。**
 

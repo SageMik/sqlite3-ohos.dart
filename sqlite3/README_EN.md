@@ -10,21 +10,20 @@ HarmonyOS support is based on **[鸿蒙先锋队/flutter](https://gitee.com/harm
 
 ## Contents
 
-- [Quick Start](#Quick-Start)
-    - [Import `sqlite3`](#Import-sqlite3)
-        - [Another Way to Support HarmonyOS](#Another-Way-to-Support-HarmonyOS)
-    - [Import `sqlite3_flutter_libs` (Optional)](#Import-sqlite3_flutter_libs-Optional)
-    - [Manage Databases via `sqlite3`](#Manage-Databases-via-sqlite3)
-- [Provide SQLite Native Libraries Manually](#Provide-SQLite-Native-Libraries-Manually)
-    - [Obtain](#Obtain)
-    - [Override](#Override)
+- [Quick Start](#quick-start)
+  - [Add and Import `sqlite3`](#add-and-import-sqlite3)
+    - [Other Ways to Support HarmonyOS](#other-ways-to-support-harmonyos)
+  - [Add `sqlite3_flutter_libs` (Optional)](#add-sqlite3_flutter_libs-optional)
+  - [Manage Databases via `sqlite3`](#manage-databases-via-sqlite3)
+  - [Provide SQLite Native Libraries Manually](#provide-sqlite-native-libraries-manually)
+    - [Obtain](#obtain)
+    - [Override](#override)
 - [`drift` for HarmonyOS](#drift-for-harmonyos)
-- [Addition](#Addition)
-
+- [Addition](#addition)
 
 ## Quick Start
 
-### Import `sqlite3`
+### Add and Import `sqlite3`
 
 ```yaml
 dependencies:
@@ -35,7 +34,7 @@ dependencies:
       ref: sqlite3-2.4.7-ohos-beta
 ```
 
-#### Another Way to Support HarmonyOS
+#### Other Ways to Support HarmonyOS
 
 Besides importing this forked version, if you want to support HarmonyOS, you can also use a simple judgment to achieve it. So that you can keep the dependency reference to original `sqlite3`, but it may need more modifications.
 
@@ -58,7 +57,7 @@ Sqlite3 get sqlite3 {
 }
 ```
 
-### Import `sqlite3_flutter_libs` (Optional)
+### Add `sqlite3_flutter_libs` (Optional)
 
 ```yaml
 dependencies:
@@ -75,7 +74,7 @@ For example, For Android and HarmonyOS, you may provide `libsqlite3.so` for arch
 
 This also means that you can use `sqlite3` on any platform that can load native libraries and obtain SQLite3 symbols via `DynamicLibrary`.
 
-If you are a Flutter developer, it is recommended to import `sqlite3_flutter_libs` directly, which includes native SQLite libraries for the following platforms:
+If you are a Flutter developer, it is recommended to add `sqlite3_flutter_libs` as dependency directly, which includes native SQLite libraries for the following platforms:
 
 - HarmonyOS
 - Android
@@ -84,7 +83,7 @@ If you are a Flutter developer, it is recommended to import `sqlite3_flutter_lib
 - MacOS
 - Linux
 
-After import it, the native libraries will be included in your application and distributed with it. As a result, you can use `sqlite3` to maintain SQLite databases on these platforms without any additional configurations.
+After adding it, the native libraries will be included in your application and distributed with it. As a result, you can use `sqlite3` to maintain SQLite databases on these platforms without any additional configurations.
 
 If not, or if you prefer to compile SQLite native libraries by yourself, please refer to [Provide SQLite Native Libraries Manually](#Provide-SQLite-Native-Libraries-Manually).
 
@@ -112,7 +111,7 @@ Apart from **including SQLite native libraries via `sqlite3_flutter_libs`**, you
 If you want to customize your native libraries with different compilation options and compile them yourself, please refer to the official guide [How To Compile SQLite](https://sqlite.org/howtocompile.html) or the implementations of [`sqlite3_flutter_libs` on different platforms](../sqlite3_flutter_libs) for different platforms, for example:
 
 - **Android**: [`sqlite3-native-library/cpp/CMakeLists.txt`](https://github.com/simolus3/sqlite-native-libraries/blob/master/sqlite3-native-library/cpp/CMakeLists.txt) in [sqlite-native-libraries](https://github.com/simolus3/sqlite-native-libraries).
-- **HarmonyOS**: [`sqlite3_native_library/src/main/cpp/CMakeLists.txt`](https://github.com/SageMik/sqlite3_ohos/blob/main/sqlite3_native_library/src/main/cpp/CMakeLists.txt) in [sqlite_ohos](https://github.com/SageMik/sqlite3_ohos) (keep consistent with the Android).
+- **HarmonyOS**: [`sqlite3_native_library/src/main/cpp/CMakeLists.txt`](https://github.com/SageMik/sqlite3.ArkTS/blob/main/sqlite3_native_library/src/main/cpp/CMakeLists.txt) in [sqlite3.ArkTS](https://github.com/SageMik/sqlite3.ArkTS) (keep consistent with the Android).
 
 #### Override
 
@@ -149,4 +148,4 @@ DynamicLibrary _openOnLinux() {
 
 ## Addition
 
-For any matters not covered herein, please refer to [sqlite.dart](https://github.com/simolus3/sqlite3.dart).
+For any matters not covered herein, please refer to the original repository [sqlite.dart](https://github.com/simolus3/sqlite3.dart).
