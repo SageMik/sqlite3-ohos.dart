@@ -4,7 +4,7 @@
 
 > [!TIP]
 >
-> 这是 [sqlite.dart](https://github.com/simolus3/sqlite3.dart) 的分支版本之一，基于 [鸿蒙先锋队/flutter](https://gitee.com/harmonycommando_flutter/flutter)（Flutter 版本：3.22）对 HarmonyOS 进行了适配，并补充了中文文档说明。
+> 这是 [sqlite.dart](https://github.com/simolus3/sqlite3.dart) 的分支版本之一，基于 **[鸿蒙突击队 / Flutter 3.22.0](https://gitee.com/harmonycommando_flutter/flutter/tree/oh-3.22.0)** 对 HarmonyOS 进行了适配，并补充了中文文档说明。
 
 本存储库集成了 SQLite 相关的 Dart/Flutter 包，这些包通过 `dart:ffi` 实现了在 Dart 中使用 SQLite 的功能。
 
@@ -18,7 +18,7 @@
 
 | 包                                                | 适配情况                                   |
 | ------------------------------------------------- | ------------------------------------------ |
-| [`sqlite3`](sqlite3)                               | 已经可用，请参阅 [相关](sqlite3)[说明](sqlite3) |
+| [`sqlite3`](sqlite3)                               | 已经可用，请参阅 [相关说明](sqlite3#sqlite3) |
 | [`sqlite3_flutter_libs`](sqlite3_flutter_libs)     | 已经可用，同上                             |
 | [`sqlcipher_flutter_libs`](sqlcipher_flutter_libs) | 暂未适配                                   |
 | [`sqlite3_web`](sqlite3_web)                       | 无关                                       |

@@ -6,24 +6,23 @@ Provides Dart bindings to [SQLite](https://www.sqlite.org/index.html) via `dart:
 
 This library is one of forked versions of [sqlite.dart](https://github.com/simolus3/sqlite3.dart). Derived from the original support for Android, iOS, Windows, MacOS, Linux, and Web, **this library provides additional support for HarmonyOS**.
 
-HarmonyOS support is based on **[鸿蒙先锋队/flutter](https://gitee.com/harmonycommando_flutter/flutter/tree/oh-3.22.0/) (Flutter Version：3.22)** and has been tested on Mac Arm HarmonyOS Simulator.
+HarmonyOS support is based on **[鸿蒙突击队 / Flutter 3.22.0](https://gitee.com/harmonycommando_flutter/flutter/tree/oh-3.22.0)** and has been tested on Mac Arm HarmonyOS Simulator.
 
 ## Contents
 
 - [Quick Start](#quick-start)
-  - [Add and Import `sqlite3`](#add-and-import-sqlite3)
-    - [Other Ways to Support HarmonyOS](#other-ways-to-support-harmonyos)
+  - [Add `sqlite3`](#add-sqlite3)
   - [Add `sqlite3_flutter_libs` (Optional)](#add-sqlite3_flutter_libs-optional)
   - [Manage Databases via `sqlite3`](#manage-databases-via-sqlite3)
   - [Provide SQLite Native Libraries Manually](#provide-sqlite-native-libraries-manually)
     - [Obtain](#obtain)
     - [Override](#override)
-- [`drift` for HarmonyOS](#drift-for-harmonyos)
+  - [Add HarmonyOS Support for Packages that Depend on `sqlite3` and `sqlite3_flutter_libs`](#add-harmonyos-support-for-packages-that-depend-on-sqlite3-and-sqlite3_flutter_libs)
 - [Addition](#addition)
 
 ## Quick Start
 
-### Add and Import `sqlite3`
+### Add `sqlite3`
 
 ```yaml
 dependencies:
@@ -31,30 +30,7 @@ dependencies:
     git:
       url: https://github.com/SageMik/sqlite3-ohos.dart
       path: sqlite3
-      ref: sqlite3-2.4.7-ohos-beta
-```
-
-#### Other Ways to Support HarmonyOS
-
-Besides importing this forked version, if you want to support HarmonyOS, you can also use a simple judgment to achieve it. So that you can keep the dependency reference to original `sqlite3`, but it may need more modifications.
-
-Specifically, you need to define a new `sqlite3` as follows and replace all the usages of `sqlite3` imported from `package:sqlite3/sqlite3.dart` in your project with it.
-
-```dart
-import 'dart:ffi';
-import 'dart:io';
-
-import 'package:sqlite3/sqlite3.dart' as s3;
-import 'package:sqlite3/sqlite3.dart' hide sqlite3;
-import 'package:sqlite3/src/ffi/implementation.dart';
-
-Sqlite3? _sqlite3;
-
-Sqlite3 get sqlite3 {
- return _sqlite3 ??= Platform.operatingSystem == 'ohos'
-     ? FfiSqlite3(DynamicLibrary.open("libsqlite3.so"))
-     : s3.sqlite3;
-}
+      ref: sqlite3-2.4.7-ohos
 ```
 
 ### Add `sqlite3_flutter_libs` (Optional)
@@ -65,7 +41,7 @@ dependencies:
     git:
       url: https://github.com/SageMik/sqlite3-ohos.dart
       path: sqlite3_flutter_libs
-      ref: sqlite3_flutter_libs-0.5.25-ohos-beta
+      ref: sqlite3_flutter_libs-0.5.25-ohos
 ```
 
 To support `sqlite3` in accessing databases, you need to ensure that SQLite native libraries are accessible in your environment.
@@ -74,7 +50,7 @@ For example, For Android and HarmonyOS, you may provide `libsqlite3.so` for arch
 
 This also means that you can use `sqlite3` on any platform that can load native libraries and obtain SQLite3 symbols via `DynamicLibrary`.
 
-If you are a Flutter developer, it is recommended to add `sqlite3_flutter_libs` as dependency directly, which includes native SQLite libraries for the following platforms:
+If you are a Flutter developer, it is recommended to add `sqlite3_flutter_libs` as your dependency directly, which includes native SQLite libraries for the following platforms:
 
 - HarmonyOS
 - Android
@@ -83,7 +59,7 @@ If you are a Flutter developer, it is recommended to add `sqlite3_flutter_libs` 
 - MacOS
 - Linux
 
-After adding it, the native libraries will be included in your application and distributed with it. As a result, you can use `sqlite3` to maintain SQLite databases on these platforms without any additional configurations.
+After adding it, the native libraries will be included in your application and distributed with your application. As a result, you can use `sqlite3` to manage SQLite databases on these platforms without any additional configurations.
 
 If not, or if you prefer to compile SQLite native libraries by yourself, please refer to [Provide SQLite Native Libraries Manually](#Provide-SQLite-Native-Libraries-Manually).
 
@@ -130,7 +106,7 @@ void main() {
 
   final db = sqlite3.openInMemory();
   
-  // 执行数据库操作
+  // DO SOME DATABASE OPERATIONS
 
   db.dispose();
 }
@@ -142,9 +118,27 @@ DynamicLibrary _openOnLinux() {
 }
 ```
 
-## `drift` for HarmonyOS
+### Add HarmonyOS Support for Packages that Depend on `sqlite3` and `sqlite3_flutter_libs`
 
-[Drift](https://github.com/simolus3/drift) is an ORM framework based on `sqlite3`. In principle, by using `dependency_overrides` in `pubspec.yaml` to override `sqlite3` with this forked version, you should be able to use `drift` on HarmonyOS. This conclusion needs to be verified and is waiting for examples.
+In theory, by overriding `sqlite3` and `sqlite3_flutter_libs` with this forked version packages depended on them are supposed to manage SQLite on HarmonyOS, such as [`drift`](https://github.com/simolus3/drift), [`sqflite_common_ffi`](https://github.com/tekartik/sqflite/tree/master/sqflite_common_ffi) and so on.
+
+```yaml
+dependency_overrides:
+  
+  sqlite3:
+    git:
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlite3
+      ref: sqlite3-2.4.7-ohos
+  
+  sqlite3_flutter_libs:
+    git:
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlite3_flutter_libs
+      ref: sqlite3_flutter_libs-0.5.25-ohos
+```
+
+This conclusion is waiting for further examples.
 
 ## Addition
 

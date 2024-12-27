@@ -46,7 +46,7 @@ android {
 
 ### Android 6 加载原生库问题
 
-在 Android 6 上加载原生库时似乎存在问题（参见 [此问题](https://github.com/simolus3/moor/issues/895#issuecomment-720195005)） 。如果您也遇到此类崩溃，可以尝试在 `gradle.properties` 中配置 `android.bundle.enableUncompressedNativeLibs=false` 。这应该能解决此类崩溃，但会增加应用的安装大小。
+在 Android 6 上加载原生库时似乎存在问题（参见 [此问题](https://github.com/simolus3/moor/issues/895#issuecomment-720195005) ） 。如果您也遇到此类崩溃，可以尝试在 `gradle.properties` 中配置 `android.bundle.enableUncompressedNativeLibs=false` 。这应该能解决此类崩溃，但会增加应用的安装大小。
 
 此外，您也可以调用本库的 `applyWorkaroundToOpenSqlite3OnOldAndroidVersions()` 方法。它会尝试在 Java 中加载 SQLite 原生库，应该是更可靠的方法。待 Java 中的 SQLite 就绪后，我们也就能够在 Dart 中打开它。
 

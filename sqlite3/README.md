@@ -6,24 +6,23 @@
 
 本库是 [sqlite.dart](https://github.com/simolus3/sqlite3.dart) 的分支版本之一，在原版支持 Android, iOS, Windows, MacOS, Linux, Web 的基础上，**新增了对 HarmonyOS 平台的支持**。
 
-HarmonyOS 适配基于 **[鸿蒙先锋队/flutter](https://gitee.com/harmonycommando_flutter/flutter/tree/oh-3.22.0/) (Flutter版本：3.22)** 实现，目前已在 Mac Arm HarmonyOS 模拟器 通过测试。
+HarmonyOS 适配基于 **[鸿蒙突击队 / Flutter 3.22.0](https://gitee.com/harmonycommando_flutter/flutter/tree/oh-3.22.0)** 实现，目前已在 Mac Arm HarmonyOS 模拟器 通过测试。
 
 ## 目录
 
 - [快速开始](#快速开始)
-  - [添加并导入 `sqlite3`](#添加并导入-sqlite3)
-    - [其他 HarmonyOS 适配方案](#其他-harmonyos-适配方案)
+  - [添加 `sqlite3`](#添加-sqlite3)
   - [添加 `sqlite3_flutter_libs` (可选)](#添加-sqlite3_flutter_libs-可选)
   - [通过 `sqlite3` 管理数据库](#通过-sqlite3-管理数据库)
   - [自行提供 SQLite 原生库](#自行提供-sqlite-原生库)
     - [获取](#获取)
     - [覆盖](#覆盖)
-- [`drift` 的 HarmonyOS 适配](#drift-的-harmonyos-适配)
+  - [为依赖于 `sqlite3`、`sqlite3_flutter_libs` 的库添加 HarmonyOS 支持](#为依赖于-sqlite3sqlite3_flutter_libs-的库添加-harmonyos-支持)
 - [补充说明](#补充说明)
 
 ## 快速开始
 
-### 添加并导入 `sqlite3`
+### 添加 `sqlite3`
 
 ```yaml
 dependencies:
@@ -31,30 +30,7 @@ dependencies:
     git:
       url: https://github.com/SageMik/sqlite3-ohos.dart
       path: sqlite3
-      ref: sqlite3-2.4.7-ohos-beta
-```
-
-#### 其他 HarmonyOS 适配方案
-
-如果您希望支持 HarmonyOS 平台，除了引入本分支版本外，也可以通过简单的代码判断实现。如此可以保留对原版 `sqlite3` 的依赖引用，但可能需要更繁琐的修改。
-
-具体而言，通过如下代码定义一个新的 `sqlite3` ，**替换掉项目中所有使用到的从 `package:sqlite3/sqlite3.dart` 导入的 `sqlite3` 即可：**
-
-```dart
-import 'dart:ffi';
-import 'dart:io';
-
-import 'package:sqlite3/sqlite3.dart' as s3;
-import 'package:sqlite3/sqlite3.dart' hide sqlite3;
-import 'package:sqlite3/src/ffi/implementation.dart';
-
-Sqlite3? _sqlite3;
-
-Sqlite3 get sqlite3 {
- return _sqlite3 ??= Platform.operatingSystem == 'ohos'
-     ? FfiSqlite3(DynamicLibrary.open("libsqlite3.so"))
-     : s3.sqlite3;
-}
+      ref: sqlite3-2.4.7-ohos
 ```
 
 ### 添加 `sqlite3_flutter_libs` (可选)
@@ -65,7 +41,7 @@ dependencies:
     git:
       url: https://github.com/SageMik/sqlite3-ohos.dart
       path: sqlite3_flutter_libs
-      ref: sqlite3_flutter_libs-0.5.25-ohos-beta
+      ref: sqlite3_flutter_libs-0.5.25-ohos
 ```
 
 为了支持 `sqlite3` 管理数据库，您需要确保您的环境中存在可访问的 SQLite3 原生库。
@@ -144,9 +120,27 @@ DynamicLibrary _openOnLinux() {
 }
 ```
 
-## `drift` 的 HarmonyOS 适配
+### 为依赖于 `sqlite3`、`sqlite3_flutter_libs` 的库添加 HarmonyOS 支持
 
-[Drift](https://github.com/simolus3/drift) 是基于 `sqlite3` 实现的 ORM 框架。 理论上，在 `pubspec.yaml` 通过 `dependency_overrides` 覆盖 `sqlite3` 为本分支版本，就应当能够让 `drift` 支持 HarmonyOS 平台。这一结论目前需要通过实例验证，待补充具体示例。
+理论上，在 `pubspec.yaml` 中将其他依赖中的 `sqlite3`、`sqlite3_flutter_libs` 覆盖为本分支版本，即支持这些库在 HarmonyOS 上管理 SQLite ，如 [`drift`](https://github.com/simolus3/drift)、[`sqflite_common_ffi`](https://github.com/tekartik/sqflite/tree/master/sqflite_common_ffi) 等：
+
+```yaml
+dependency_overrides:
+  
+  sqlite3:
+    git:
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlite3
+      ref: sqlite3-2.4.7-ohos
+  
+  sqlite3_flutter_libs:
+    git:
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlite3_flutter_libs
+      ref: sqlite3_flutter_libs-0.5.25-ohos
+```
+
+这一结论待补充具体示例。
 
 ## 补充说明
 
