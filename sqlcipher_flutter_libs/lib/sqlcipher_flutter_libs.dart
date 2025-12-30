@@ -11,6 +11,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_platform_utils/flutter_platform_utils.dart';
 
 const _platform = MethodChannel('sqlcipher_flutter_libs');
 
@@ -35,6 +36,31 @@ Future<void> applyWorkaroundToOpenSqlCipherOnOldAndroidVersions() async {
 
     // Try again. If it still fails we're out of luck.
     DynamicLibrary.open('libsqlcipher.so');
+  }
+}
+
+/// 在 HarmonyOS 平台打开 SQLCipher 动态库
+///
+/// 用法：
+/// ```dart
+/// import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
+/// import 'package:sqlite3/open.dart';
+///
+/// open.overrideFor(OperatingSystem.ohos, openCipherOnOhos);
+/// ```
+DynamicLibrary openCipherOnOhos() {
+  try {
+    return DynamicLibrary.open('libsqlcipher.so');
+  } catch (_) {
+    // 在某些 HarmonyOS 设备上，可能需要使用完整路径加载动态库
+    // 类似 Android 的处理方式
+    final appIdAsBytes = File('/proc/self/cmdline').readAsBytesSync();
+
+    // app id ends with the first \0 character in here.
+    final endOfAppId = max(appIdAsBytes.indexOf(0), 0);
+    final appId = String.fromCharCodes(appIdAsBytes.sublist(0, endOfAppId));
+
+    return DynamicLibrary.open('/data/data/$appId/lib/libsqlcipher.so');
   }
 }
 
