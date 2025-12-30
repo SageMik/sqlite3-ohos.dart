@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_platform_utils: ^1.0.0
 
 flutter:
   plugin:
@@ -27,4 +28,6 @@ flutter:
       linux:
         pluginClass: Sqlite3FlutterLibsPlugin
       windows:
+        pluginClass: Sqlite3FlutterLibsPlugin
+      ohos:
         pluginClass: Sqlite3FlutterLibsPlugin
