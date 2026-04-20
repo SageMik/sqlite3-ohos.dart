@@ -5,4 +5,13 @@ packages:
 melos:
   repository: https://github.com/SageMik/sqlite3-ohos.dart
 
-sdkPath: .fvm/flutter_sdk
+scripts:
+  clean:
+    run: |
+      flutter clean
+      pushd packages/sqlite3_ohos_bridge
+      flutter clean
+      pushd example
+      flutter clean
+      popd
+      popd

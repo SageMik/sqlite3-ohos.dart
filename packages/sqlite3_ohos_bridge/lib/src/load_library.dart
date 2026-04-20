@@ -4,6 +4,9 @@ import 'dart:math';
 
 import 'package:meta/meta.dart';
 
+/// 除鸿蒙和 Web 平台外，打开 SQLite 原生库的默认逻辑。
+///
+/// 与 [load_library.dart](https://github.com/simolus3/sqlite3.dart/blob/sqlite3-2.9.4/sqlite3/lib/src/ffi/load_library.dart) 保持一致。
 @internal
 DynamicLibrary defaultOpen() {
   if (Platform.isAndroid) {
