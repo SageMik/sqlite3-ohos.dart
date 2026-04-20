@@ -1,0 +1,8 @@
+name: sqlite3_ohos_bridge
+packages:
+  - packages/sqlite3_ohos_bridge
+
+melos:
+  repository: https://github.com/SageMik/sqlite3-ohos.dart
+
+sdkPath: .fvm/flutter_sdk

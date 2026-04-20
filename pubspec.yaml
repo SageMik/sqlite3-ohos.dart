@@ -1,0 +1,10 @@
+name: sqlite3_ohos_dart
+publish_to: none
+environment:
+  sdk: ^3.6.2
+workspace:
+  - packages/sqlite3_ohos_bridge
+  - packages/sqlite3_ohos_bridge/example
+
+dev_dependencies:
+  melos: ^6.3.2

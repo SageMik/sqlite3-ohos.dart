@@ -1,0 +1,13 @@
+{
+  "name": "sqlite3_ohos_bridge",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "sqlite3-native-library": "^3.46.0+1"
+  },
+  "devDependencies": {},
+  "dynamicDependencies": {}
+}

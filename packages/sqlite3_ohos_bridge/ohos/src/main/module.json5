@@ -1,0 +1,10 @@
+{
+  "module": {
+    "name": "sqlite3_ohos_bridge",
+    "type": "har",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+  }
+}
