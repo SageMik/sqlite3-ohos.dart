@@ -1,0 +1,14 @@
+{
+  "name": "sqlcipher_flutter_libs",
+  "version": "1.0.0",
+  "description": "SQLCipher native library for HarmonyOS",
+  "main": "index.ets",
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ohos/flutter_ohos": "file:./har/flutter.har"
+    // TODO: 需要添加 SQLCipher HarmonyOS 原生库依赖
+    // 当前暂无官方的 HarmonyOS SQLCipher HAR 包
+    // 需要自行编译 libsqlcipher.so 并放置在 libs/ 目录下
+  }
+}
