@@ -1,0 +1,13 @@
+# OpenSSL 编译产物
+openssl/
+
+# 编译临时目录
+build/
+
+# DevEco Studio 生成的文件
+.idea/
+node_modules/
+oh_modules/
+
+# 本地配置文件
+local.properties
