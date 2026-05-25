@@ -23,10 +23,10 @@
 
 ## HarmonyOS 适配
 
-| 包                                                | 适配情况                                   |
-| ------------------------------------------------- | ------------------------------------------ |
-| [`sqlite3`](sqlite3)                               | 已经可用，请参阅 [相关说明](sqlite3#sqlite3) |
-| [`sqlite3_flutter_libs`](sqlite3_flutter_libs)     | 已经可用，同上                             |
-| [`sqlcipher_flutter_libs`](sqlcipher_flutter_libs) | 已完成，支持加密数据                        |
-| [`sqlite3_web`](sqlite3_web)                       | 无关                                       |
-| [`integration_tests`](integration_tests)           | 示例程序，暂未适配                         |
+| 包                                                  | 适配情况                                                         |
+|----------------------------------------------------|--------------------------------------------------------------|
+| [`sqlite3`](sqlite3)                               | 已经可用，请参阅 [相关说明](sqlite3#sqlite3)                             |
+| [`sqlite3_flutter_libs`](sqlite3_flutter_libs)     | 已经可用，同上                                                      |
+| [`sqlcipher_flutter_libs`](sqlcipher_flutter_libs) | 已完成，支持加密数据，请参阅 [相关说明](sqlcipher_flutter_libs/ohos/README.md) |
+| [`sqlite3_web`](sqlite3_web)                       | 无关                                                           |
+| [`integration_tests`](integration_tests)           | 示例程序，暂未适配                                                    |

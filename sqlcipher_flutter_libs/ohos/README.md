@@ -10,6 +10,21 @@
 
 ## 使用方法
 
+```yaml
+dependencies:
+  sqlite3:
+    git:
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlite3
+      ref: sqlite3-2.4.7-ohos
+
+  sqlcipher_flutter_libs:
+    git:
+      url: https://github.com/SageMik/sqlite3-ohos.dart
+      path: sqlcipher_flutter_libs
+      ref: sqlcipher_flutter_libs-0.6.4-ohos
+```
+
 ```dart
 import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
 import 'package:sqlite3/open.dart';
@@ -46,7 +61,11 @@ export OHOS_NDK=/path/to/harmonyos-sdk/native
 
 ### 2. 修改 sqlite3.ArkTS 项目
 
-克隆 [sqlite3.ArkTS](https://github.com/SageMik/sqlite3.ArkTS) 并修改 CMakeLists.txt:
+> [!TIP]
+> 
+> 由于 sqlite3.ArkTS 原项目已经调整为 [sqlite-native-libraries](https://github.com/SageMik/sqlite-native-libraries)，可以参考 Fork 版本 [tech-ming/sqlite3.arkts 的 `feature/sqlcipher` 分支](https://github.com/tech-ming/sqlite3.arkts/tree/feature/sqlcipher) 进行调整。
+
+克隆 [sqlite3.ArkTS](https://github.com/tech-ming/sqlite3.arkts) 并修改 CMakeLists.txt:
 
 - 下载 SQLCipher 源码（v4.5.7）
 - 添加 OpenSSL 静态链接
@@ -75,6 +94,5 @@ cp libs/x86_64/libsqlcipher.so sqlcipher_flutter_libs/ohos/libs/x86_64/
 ## 参考资料
 
 - [SQLCipher 官方文档](https://www.zetetic.net/sqlcipher/)
-- [sqlite3.ArkTS](https://github.com/SageMik/sqlite3.ArkTS)
 - [sqlcipher_flutter_libs Linux 实现](../linux/CMakeLists.txt)
 - [sqlcipher_flutter_libs Windows 实现](../windows/CMakeLists.txt)
