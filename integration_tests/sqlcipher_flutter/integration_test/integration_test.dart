@@ -14,6 +14,7 @@ void main() {
 
     open.overrideFor(
         OperatingSystem.android, () => DynamicLibrary.open('libsqlcipher.so'));
+    open.overrideFor(OperatingSystem.ohos, openCipherOnOhos);
   });
 
   test('can open sqlite3', () {
